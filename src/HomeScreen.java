@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -53,12 +54,12 @@ public class HomeScreen
 					break;
 				}
 		case 3:	{	
-					System.out.println("\nThank You.....\nExit");
+					System.err.println("\nThank You.....\nExit");
 					System.exit(0);
 				}
 				
 		default:
-				System.out.println("\nUnexpected Selection -> " + choice);
+				System.err.println("\nUnexpected Selection -> " + choice);
 		}
 		
 		
@@ -72,7 +73,7 @@ public class HomeScreen
 		Scanner inputLogin=new Scanner(System.in);
 		System.out.println("\n	Login Screen");
 		System.out.println("-----------------------");
-		System.out.print("User Name :- ");
+		System.out.print("User Id :- ");
 		user=inputLogin.nextLine();
 		System.out.print("Password :- ");
 //		Console console = System.console();
@@ -86,38 +87,38 @@ public class HomeScreen
 		}
 		else if(userList.size()==0) 
 		{
-			System.out.println("\nPlease Create Account.....");
+			System.err.println("\nPlease Create Account.....");
 			System.err.println("****************************");
-			System.out.println("Redirecting to  Home Screen");
+			System.err.println("Redirecting to  Home Screen");
 			welcomeScreen();
 		}
 		else {
+			int count=0;
 			for (WalletUser walletUser : userList) {
-				if(user.equalsIgnoreCase(walletUser.getLoginName()))
+				if(user.equals(walletUser.getLoginName()))
 				{	
-					int count=2;
-	
-					do {
-					
+				
 						if(password.equalsIgnoreCase(walletUser.getPassword())) 
 						{
 							System.out.println("Welcome To  Your Wallet");
 							profile(walletUser);
 							break;
 						}
-						count--;
-					}while(count>0);
+						else {
+							
+								count++;
+							
+						}	
 
-				}
-				else 
-				{
-					System.out.println("\nPlease Create Account.....");
-					System.err.println("****************************");
-					System.out.println("Redirecting to  Home Screen");
-					welcomeScreen();
-				}
-				
-			}	
+				}		
+			}
+			if (count==userList.size())
+			{
+				System.err.println("\nPlease Create Account Or Incorrect Password.....");
+				System.err.println("****************************");
+				System.err.println("Redirecting to  Home Screen");
+				welcomeScreen();
+			}
 		}
 		//inputLogin.close();
 		
@@ -127,6 +128,7 @@ public class HomeScreen
 	{
 		double money=0.0;
 		Scanner adminInput=new Scanner(System.in);
+		System.out.println("---------------------------------");
 		System.out.println("	Admin Panel");
 		System.out.println("---------------------------------");
 		System.out.println("Total User Registered -"+userList.size());
@@ -137,32 +139,35 @@ public class HomeScreen
 		{
 			money=money+walletAccount.getAccountBalance();
 		}
-		System.out.println(money+"/-");
-		System.out.println("---------------------------------");
-		System.out.println("	Admin Menu");
-		System.out.println("1. Transaction logs");
-		System.out.println("2. Search User");
-		//System.out.println("3. Approve Wallets");  //Pending
-		System.out.println("Press Any Other Key for Home Screen");
-		choice=adminInput.nextInt();
-		switch (choice) {
-		case 1: 
-			{	
-				transactionLogMeathod();
-				break;
+		while(true) {
+			System.out.println(money+"/-");
+			System.out.println("---------------------------------");
+			System.out.println("	Admin Menu");
+			System.out.println("1. Transaction logs");
+			System.out.println("2. Search User");
+			//System.out.println("3. Approve Wallets");  //Pending
+			System.out.print("Press Any Other Key for Home Screen :-");
+			choice=adminInput.nextInt();
+			switch (choice) {
+			case 1: 
+				{	
+					transactionLogMeathod();
+					break;
+				}
+			case 2:
+				{	
+					findUserDetails();
+					break;
+				
+				}
+			default:
+				System.err.println("\nUnexpected Selection -> " + choice);
+				System.err.println("****************************");
+				System.err.println("Redirecting to  Home Screen");
+				welcomeScreen();
 			}
-		case 2:
-			{	
-				findUserDetails();
-				break;
-			
-			}
-		default:
-			System.out.println("\nUnexpected Selection -> " + choice);
-			System.err.println("****************************");
-			System.out.println("Redirecting to  Home Screen");
-			welcomeScreen();
 		}
+		
 		
 	}
 
@@ -188,7 +193,7 @@ public class HomeScreen
 	private static void findUserDetails() 
 	{	Scanner searchedInput=new Scanner(System.in);
 		String searchedUser;
-		System.out.println("Enter  Name of  User to  be searched :-");
+		System.out.println("Enter  Login Id of User to  be searched :-");
 		searchedUser=searchedInput.nextLine();
 		for (WalletUser walletUser : userList) 
 		{
@@ -211,23 +216,138 @@ public class HomeScreen
 	}
 
 	private static void profile(WalletUser walletUser)
-	{
-		System.out.println("	Account Information");
+	{	
+		Scanner profileInput=new Scanner(System.in);
+		System.out.println("\n	Wallet Information");
 		System.out.println("---------------------------------------------");
-		System.out.println("Account Holder Name    - "+walletUser.getUserName());
-		System.out.println("Account Number		- 0000"+walletUser.getUserId());
+		System.out.println("Wallet Holder Name    - "+walletUser.getUserName());
+		System.out.println("Wallet Number		- "+walletUser.getUserId());
 		
 		for(WalletAccount walletAccount :	walletList) 
 		{
 			if(walletAccount.getAccountId()==walletUser.getUserId()) 
 			{
-				System.out.println("Account Balance		- "+walletAccount.getAccountBalance()+" /-");
+				System.out.println("Wallet Balance		- "+walletAccount.getAccountBalance()+" /-");
+				break;
 			}
 		}
 		
 		System.out.println("---------------------------------------------");
+		System.out.println("	Wallet Menu");
+		System.out.println("1. Add Money  to  Wallet");
+		System.out.println("2. Transfer Money");
+		System.out.println("Any Other Input to Sign Out");
+		System.out.println("---------------------------------------------");
+		System.out.print("Select - ");
+		choice=profileInput.nextInt();
+		switch (choice) {
+		case 1: 
+		{
+			System.out.println("-----------------------------------");
+			System.out.print("Enter Money  to Add in Your Wallet -");
+			double addmoney=profileInput.nextDouble();
+			for(WalletAccount walletAccount :	walletList) 
+			{
+				if(walletAccount.getAccountId()==walletUser.getUserId()) 
+				{	
+					walletAccount.setAccountBalance(walletAccount.getAccountBalance()+addmoney);
+					System.out.println("New Wallet Balance is "+walletAccount.getAccountBalance()+" /-");
+					break;
+				}
+			}
+			break;
+		}
+		case 2:
+		{	
+			double transfer_amount;
+			String transfer_id;
+			
+			System.out.println("------------------------------------");
+			System.out.println("	Money Transfer ");
+			System.out.print("Enter Money to Transfer :- ");
+			transfer_amount=profileInput.nextDouble();
+			System.out.print("Enter User id for transfer :- ");
+			transfer_id=profileInput.nextLine();
+			WalletUser receiver=null;
+			WalletAccount sender=null;
+			for(WalletAccount walletAccount :	walletList) 
+			{
+				if(walletAccount.getAccountId()==walletUser.getUserId()&&walletAccount.getAccountBalance()>=transfer_amount) 
+				{	
+					
+					for (WalletUser findUser : userList) 
+					{
+						if(transfer_id.equalsIgnoreCase(findUser.getLoginName()))
+						{
+							System.out.println(transfer_amount+" "+transfer_id);
+							receiver=findUser;
+							sender=walletAccount;
+							break;
+						}
+					}
+
+				}
+				else if(walletAccount.getAccountId()==walletUser.getUserId()&&walletAccount.getAccountBalance()<transfer_amount)
+				{
+					System.err.println("Your account  Balance  is  insufficient for  this  Transaction");
+					profile(walletUser);
+					break;
+				}
+			}
+			
+			if(receiver!=null) 
+			{
+				transferMoney(sender,transfer_amount,receiver);
+				
+				System.out.println("Money  Transfered.....");
+				System.out.println("New Wallet Balance is "+sender.getAccountBalance());
+				profile(walletUser);
+				
+			}
+			else
+			{
+				System.err.println("No user Exits with  this Number...");
+				profile(walletUser);
+			}
+			break;
+		}
+		default:
+			System.err.println("\nUnexpected Selection -> " + choice);
+			System.err.println("Signing Out.....");
+			System.err.println("****************************");
+			System.out.println("Redirecting to  Home Screen");
+			welcomeScreen();
+		}
 		
+	}
+
+	private static void transferMoney(WalletAccount senderWallet, double transfer_amount,  WalletUser receiver)
+	{	
+		String  description;	
+		Scanner transferInput=new  Scanner(System.in);
+		System.out.print("Enter  description for  transaction :- ");
+		description=transferInput.nextLine();
 		
+		WalletTransactions senderTransactions=new WalletTransactions(transactionId, description, LocalDateTime.now(), transfer_amount, senderWallet.getAccountBalance());
+		senderWallet.getTransactionHistory().add(senderTransactions);
+		transactionsLog.add(senderTransactions);
+		
+		senderWallet.setAccountBalance(senderWallet.getAccountBalance()-transfer_amount);
+		
+		for (WalletAccount walletAccount : walletList) 
+		{
+			if(receiver.getUserId()==walletAccount.getAccountId()) 
+			{	
+				walletAccount.setAccountBalance(walletAccount.getAccountBalance()+transfer_amount);
+				WalletTransactions receiverTransactions=new WalletTransactions(transactionId, description, LocalDateTime.now(), transfer_amount,walletAccount.getAccountBalance());
+				walletAccount.getTransactionHistory().add(receiverTransactions);
+				transactionsLog.add(senderTransactions);
+				transactionId++;
+				break;
+			}
+		}
+		
+
 		
 	}
 
@@ -249,27 +369,36 @@ public class HomeScreen
 		System.out.print("Enter your Phone Number :- ");
 		phoneNumber=inputDetails.nextLine();
 		System.out.print("Enter your User Id :- ");
-		
-		do {
-			loginName=inputDetails.nextLine();
-			for (WalletUser walletUser : userList) 
-			{
-				if(loginName.equalsIgnoreCase(walletUser.getUserName()))
-				{
+		loginName=inputDetails.nextLine();
+		if(userList.size()>0)
+		{
+			while(userCheck){
+				int userCount=0;
+				for (WalletUser walletUser : userList) 
+				{	
+					if(loginName.equals(walletUser.getLoginName()))
+					{
+						userCheck=true;
+						break;
+					}
+					else 
+					{
+						userCount++;
+					}
+				}
+				if(userCount==userList.size()) {
+					userCount=0;
 					userCheck=false;
 					break;
 				}
+				else 
+				{
+					System.out.println("User Name Already  Exits Please Try Another User Name");
+					loginName=inputDetails.nextLine();
+				}
 			}
-			if(userCheck==false) 
-			{
-				System.out.println("User Name Already  Exits Please Try Another User Name");
-				userCheck=true;
-			}
-			if(userList.size()>0)
-			{
-				userCheck=false;
-			}
-		}while(!userCheck);
+		}
+		
 		
 		do {
 			System.out.print("Enter new Password :- ");
