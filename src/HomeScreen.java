@@ -74,12 +74,12 @@ public class HomeScreen
 		System.out.println("\n	Login Screen");
 		System.out.println("-----------------------");
 		System.out.print("User Id :- ");
-		user=inputLogin.nextLine();
+		user=inputLogin.next();
 		System.out.print("Password :- ");
 //		Console console = System.console();
 //		char[] passwordEntered = console.readPassword("Enter Passwo ");
 //		password=passwordEntered.toString();
-		password=inputLogin.nextLine();
+		password=inputLogin.next();
 		
 		if(user.equals("admin") &&password.equals("admin"))
 		{
@@ -193,8 +193,8 @@ public class HomeScreen
 	private static void findUserDetails() 
 	{	Scanner searchedInput=new Scanner(System.in);
 		String searchedUser;
-		System.out.println("Enter  Login Id of User to  be searched :-");
-		searchedUser=searchedInput.nextLine();
+		System.out.println("Enter  Login Id to  be searched :-");
+		searchedUser=searchedInput.next();
 		for (WalletUser walletUser : userList) 
 		{
 			if(searchedUser.equalsIgnoreCase(walletUser.getLoginName())) 
@@ -267,7 +267,7 @@ public class HomeScreen
 			System.out.print("Enter Money to Transfer :- ");
 			transfer_amount=profileInput.nextDouble();
 			System.out.print("Enter User id for transfer :- ");
-			transfer_id=profileInput.nextLine();
+			transfer_id=profileInput.next();
 			WalletUser receiver=null;
 			WalletAccount sender=null;
 			for(WalletAccount walletAccount :	walletList) 
@@ -326,7 +326,7 @@ public class HomeScreen
 		String  description;	
 		Scanner transferInput=new  Scanner(System.in);
 		System.out.print("Enter  description for  transaction :- ");
-		description=transferInput.nextLine();
+		description=transferInput.next();
 		
 		WalletTransactions senderTransactions=new WalletTransactions(transactionId, description, LocalDateTime.now(), transfer_amount, senderWallet.getAccountBalance());
 		senderWallet.getTransactionHistory().add(senderTransactions);
@@ -365,11 +365,11 @@ public class HomeScreen
 		Scanner inputDetails=new Scanner(System.in);
 		System.out.println("Enter Details to Create Account ");
 		System.out.print("Enter Your Full Name:- ");
-		userName=inputDetails.nextLine();
+		userName=inputDetails.next();
 		System.out.print("Enter your Phone Number :- ");
-		phoneNumber=inputDetails.nextLine();
+		phoneNumber=inputDetails.next();
 		System.out.print("Enter your User Id :- ");
-		loginName=inputDetails.nextLine();
+		loginName=inputDetails.next();
 		if(userList.size()>0)
 		{
 			while(userCheck){
@@ -394,7 +394,7 @@ public class HomeScreen
 				else 
 				{
 					System.out.println("User Name Already  Exits Please Try Another User Name");
-					loginName=inputDetails.nextLine();
+					loginName=inputDetails.next();
 				}
 			}
 		}
@@ -402,14 +402,14 @@ public class HomeScreen
 		
 		do {
 			System.out.print("Enter new Password :- ");
-			password=inputDetails.nextLine();
+			password=inputDetails.next();
 			if(password.length()<9){
 				System.out.println("Password Must be  Greater then 8");
 			}
 			else 
 			{
 				System.out.print("Re-Enter password :- ");
-				rePassword=inputDetails.nextLine();
+				rePassword=inputDetails.next();
 				if(password.equals(rePassword)) 
 				{
 					passwordCheck=false;
